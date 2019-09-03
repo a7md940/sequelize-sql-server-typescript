@@ -1,0 +1,66 @@
+import  {BuildOptions, Model, INTEGER, STRING, BIGINT} from 'sequelize';
+import Database from '../db/database';
+import { Employee, IEmployee } from './EmployeeModel';
+
+export interface IOrganization extends Model{
+    readonly id: number;
+    name: string;
+    // employees: IEmployee[],
+    phone?: string;
+}
+
+export interface OrganizationDTO {
+    name: string;
+    phone?: string; 
+}
+
+export type OrganizationModel = typeof Model & {
+    new (values?: object, options?: BuildOptions): IOrganization
+}
+const Organization = <OrganizationModel>Database.define('Organization', {
+    // if you did not define id attr with primaryKey and autoIncrement prop
+    // sequelize will make it by default
+    // if you want to change 'id' name to any thing else like orgId
+    /*
+    you have to write this -->
+    orgId: {
+        type: BIGINT,
+        autoIncrement: true,
+        unique: true,
+        primaryKey: true
+    }
+    */
+    id: {
+        type: BIGINT,
+        autoIncrement: true,
+        unique: true,
+        primaryKey: true
+    },
+    name: {
+        type: STRING,
+        allowNull: false
+    },
+    phone: {
+        type: STRING,
+        allowNull: true
+    }
+}, {
+    tableName: 'Organization'
+});
+
+Organization.hasMany(Employee, { 
+    foreignKey: {
+        name: 'OrganizationId',
+        allowNull: false
+    },
+    sourceKey : 'id',
+    as: 'employees'
+})
+
+Employee.belongsTo(Organization, {
+    foreignKey: 'OrganizationId',
+    targetKey: 'id',
+    as: 'organization'
+})
+
+export {Organization};
