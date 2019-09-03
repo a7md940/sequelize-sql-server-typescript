@@ -1,0 +1,7 @@
+POST create org
+GET get all orgs [ without emps ]
+GET getById [ with emps ]
+
+GET all emps by orgId
+
+POST emp

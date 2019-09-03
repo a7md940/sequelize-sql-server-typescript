@@ -7,5 +7,5 @@ const db = new Sequelize(dbName, username, dbPassword, {
     dialect: 'mssql'
 });
 
- 
+
 export default db;
