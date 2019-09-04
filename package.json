@@ -7,17 +7,24 @@
     "test": "jest",
     "start": "node --inspect=5858 -r ts-node/register ./src/server.ts",
     "start:watch": "nodemon",
-    "build": "tsc"
+    "build": "tsc",
+    "start:prod": "node ./dist/server.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/bluebird": "^3.5.27",
+    "@types/jsonwebtoken": "^8.3.3",
+    "@types/jwt-decode": "^2.2.1",
     "@types/node": "^12.7.3",
+    "@types/swagger-jsdoc": "^3.0.2",
+    "@types/swagger-ui-express": "^3.0.1",
     "@types/validator": "^10.11.3",
     "eslint": "^6.3.0",
     "eslint-plugin-import": "^2.18.2",
     "nodemon": "^1.19.1",
+    "swagger-jsdoc": "^3.4.0",
+    "swagger-ui-express": "^4.0.7",
     "ts-node": "^8.3.0",
     "typescript": "^3.6.2"
   },
@@ -28,6 +35,9 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^2.2.0",
+    "reflect-metadata": "^0.1.13",
     "sequelize": "^5.18.0",
     "tedious": "^6.3.0"
   },
