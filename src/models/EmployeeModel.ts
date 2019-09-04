@@ -19,6 +19,25 @@ export interface EmployeeDTO {
 type EmployeeModel = typeof Model & {
     new (values?: object, options?: BuildOptions): IEmployee
 }
+
+/**
+ * @swagger
+ * definitions:
+ *   Empployee:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       name:
+ *         type: string
+ *       organizationId:
+ *         type: integer
+ *       age:
+ *         type: integer
+ *     required:
+ *       - name
+ *       - organizationId
+ */
 const Employee = <EmployeeModel>Database.define('Employee', {
     // if you did not define id attr with primaryKey and autoIncrement prop
     // sequelize will make it by default

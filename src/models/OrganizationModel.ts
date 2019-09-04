@@ -17,6 +17,29 @@ export interface OrganizationDTO {
 export type OrganizationModel = typeof Model & {
     new (values?: object, options?: BuildOptions): IOrganization
 }
+
+
+/**
+ * @swagger
+ * definitions:
+ *   Organization:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       name:
+ *         type: string
+ *       phone:
+ *         type: string
+ *       employees:
+ *         type: array
+ *         items:
+ *            $ref: '#/definitions/Empployee'
+ *     required:
+ *       - name
+ *       - organizationId
+ */
+
 const Organization = <OrganizationModel>Database.define('Organization', {
     // if you did not define id attr with primaryKey and autoIncrement prop
     // sequelize will make it by default
