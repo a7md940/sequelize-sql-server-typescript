@@ -54,7 +54,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // app.use('/employee', employeeRouter)
 
 Database.sync({
-  //   logging: console.log
+  //   logging: console.log,
+  // force: true
 });
 
 Database.authenticate()
@@ -65,14 +66,3 @@ Database.authenticate()
     console.error('Unable to connect to the database:', err);
   });
 app.listen(PORT, () => console.log('listen:: ' + PORT));
-
-function MyClass() {}
-console.log(MyClass.prototype);
-MyClass.prototype = {
-  name: '',
-  sayHi: function() {
-    return this.name;
-  }
-};
-
-console.log(MyClass.prototype);

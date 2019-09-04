@@ -16,28 +16,31 @@ interface requestWithOrgDTO extends Request {
 @Controller('/organization')
 class OrganizationController {
   @GET('')
-  @use(authRequired)
+  // @use(authRequired)
   getOrganizations(req: Request, res: Response, next: NextFunction) {
     Organization.findAll()
       .then(orgs => {
         res.json(orgs);
       })
-      .catch(res.json);
+      .catch(err => {
+        console.log(err);
+        res.send(err);
+      });
   }
 
   @POST('')
   @bodyValidator('name')
-  @use(authRequired)
+  // @use(authRequired)
   async createOrganizations(req: requestWithOrgDTO, res: Response) {
-    try {
-      const org = await Organization.create(req.body);
-      org
-        .save()
-        .then(org => res.json({ org }))
-        .catch(err => res.json({ err }));
-    } catch (err) {
-      res.json(err.parent.message);
-    }
+    Organization.create(req.body)
+      .then(org => {
+        res.send(org);
+      })
+      .catch(err => {
+        res
+          .status(400)
+          .send({ message: 'Error on creating Organization', err });
+      });
   }
 
   /**

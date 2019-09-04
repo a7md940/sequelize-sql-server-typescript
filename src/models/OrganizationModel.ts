@@ -1,23 +1,22 @@
-import  {BuildOptions, Model, INTEGER, STRING, BIGINT} from 'sequelize';
+import { BuildOptions, Model, INTEGER, STRING, BIGINT } from 'sequelize';
 import Database from '../db/database';
 import { Employee, IEmployee } from './EmployeeModel';
 
-export interface IOrganization extends Model{
-    readonly id: number;
-    name: string;
-    // employees: IEmployee[],
-    phone?: string;
+export interface IOrganization extends Model {
+  readonly id: number;
+  name: string;
+  // employees: IEmployee[],
+  phone?: string;
 }
 
 export interface OrganizationDTO {
-    name: string;
-    phone?: string; 
+  name: string;
+  phone?: string;
 }
 
 export type OrganizationModel = typeof Model & {
-    new (values?: object, options?: BuildOptions): IOrganization
-}
-
+  new (values?: object, options?: BuildOptions): IOrganization;
+};
 
 /**
  * @swagger
@@ -40,7 +39,9 @@ export type OrganizationModel = typeof Model & {
  *       - organizationId
  */
 
-const Organization = <OrganizationModel>Database.define('Organization', {
+const Organization = <OrganizationModel>Database.define(
+  'Organization',
+  {
     // if you did not define id attr with primaryKey and autoIncrement prop
     // sequelize will make it by default
     // if you want to change 'id' name to any thing else like orgId
@@ -54,36 +55,39 @@ const Organization = <OrganizationModel>Database.define('Organization', {
     }
     */
     id: {
-        type: BIGINT,
-        autoIncrement: true,
-        unique: true,
-        primaryKey: true
+      type: BIGINT,
+      autoIncrement: true,
+      unique: true,
+      primaryKey: true
     },
     name: {
-        type: STRING,
-        allowNull: false
+      type: STRING,
+      allowNull: false
     },
     phone: {
-        type: STRING,
-        allowNull: true
+      type: STRING,
+      allowNull: true
     }
-}, {
-    tableName: 'Organization'
+  },
+  {
+    tableName: 'Organization',
+    timestamps: false
+  }
+);
+
+Organization.hasMany(Employee, {
+  foreignKey: {
+    name: 'OrganizationId',
+    allowNull: false
+  },
+  sourceKey: 'id',
+  as: 'employees'
 });
 
-Organization.hasMany(Employee, { 
-    foreignKey: {
-        name: 'OrganizationId',
-        allowNull: false
-    },
-    sourceKey : 'id',
-    as: 'employees'
-})
-
 Employee.belongsTo(Organization, {
-    foreignKey: 'OrganizationId',
-    targetKey: 'id',
-    as: 'organization'
-})
+  foreignKey: 'OrganizationId',
+  targetKey: 'id',
+  as: 'organization'
+});
 
-export {Organization};
+export { Organization };
