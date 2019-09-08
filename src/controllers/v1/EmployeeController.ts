@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import { EmployeeDTO, EmployeeDB } from '../../models/EmployeeModel';
-import { Organization } from '../../models/OrganizationModel';
-import { Controller, GET, POST } from '../decorators';
+import { Controller, GET, POST } from '../../core/decorators';
+import {
+  OrganizationRepository,
+  EmployeeRepository
+} from '../../presistence/sequelizer/repositories';
+import { EmployeeDTO } from '../../dtos/employee.dto';
 
 interface requestWithEmpDTO extends Request {
   body: EmployeeDTO;
@@ -52,8 +55,8 @@ class EmployeeController {
   @GET('')
   async getAllEmployee(req: Request, res: Response) {
     try {
-      const emps = await EmployeeDB.findAll({
-        include: [{ model: Organization, as: 'organization' }]
+      const emps = await EmployeeRepository.findAll({
+        include: [{ model: OrganizationRepository, as: 'organization' }]
       });
       res.send(emps);
     } catch (err) {
@@ -65,9 +68,9 @@ class EmployeeController {
   @POST('')
   async createEmployee(req: requestWithEmpDTO, res: Response) {
     try {
-      const emp = await EmployeeDB.create(req.body);
+      const emp = await EmployeeRepository.create(req.body);
       await emp.save();
-      res.json(await EmployeeDB.findByPk(emp.getId));
+      res.json(await EmployeeRepository.findByPk(emp.id));
     } catch (err) {
       res.send(err);
     }
@@ -75,13 +78,13 @@ class EmployeeController {
 
   @GET('/:orgId')
   async getEmployeeByOrgId(req: Request, res: Response) {
-    EmployeeDB.findAll({
+    EmployeeRepository.findAll({
       where: {
         OrganizationId: req.params.orgId
       },
       include: [
         {
-          model: Organization,
+          model: OrganizationRepository,
           as: 'organization'
         }
       ]

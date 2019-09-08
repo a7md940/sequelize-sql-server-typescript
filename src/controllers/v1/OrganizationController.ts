@@ -1,8 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import { Organization, OrganizationDTO } from '../../models/OrganizationModel';
-import { EmployeeDB } from '../../models/EmployeeModel';
-import { bodyValidator, Controller, GET, POST, use } from '../decorators';
+import { OrganizationRepository } from '../../presistence/sequelizer/repositories';
+import {
+  bodyValidator,
+  Controller,
+  GET,
+  POST,
+  use
+} from '../../core/decorators';
 import authRequired from '../../middleware/auth';
+import { EmployeeRepository } from '../../presistence/sequelizer/repositories/employee.repository';
+import { OrganizationDTO } from '../../dtos/organization.dto';
 
 interface requestWithOrgDTO extends Request {
   body: OrganizationDTO;
@@ -18,7 +25,7 @@ class OrganizationController {
   @GET('')
   // @use(authRequired)
   getOrganizations(req: Request, res: Response, next: NextFunction) {
-    Organization.findAll()
+    OrganizationRepository.findAll()
       .then(orgs => {
         res.json(orgs);
       })
@@ -32,7 +39,7 @@ class OrganizationController {
   @bodyValidator('name')
   // @use(authRequired)
   async createOrganizations(req: requestWithOrgDTO, res: Response) {
-    Organization.create(req.body)
+    OrganizationRepository.create(req.body)
       .then(org => {
         res.send(org);
       })
@@ -78,10 +85,10 @@ class OrganizationController {
   @GET('/:orgId')
   async getOrganizationById(req: Request, res: Response) {
     console.log(req.params.orgId);
-    Organization.findByPk(req.params.orgId, {
+    OrganizationRepository.findByPk(req.params.orgId, {
       include: [
         {
-          model: EmployeeDB,
+          model: EmployeeRepository,
           as: 'employees'
         }
       ]

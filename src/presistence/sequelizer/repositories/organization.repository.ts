@@ -1,21 +1,12 @@
 import { BuildOptions, Model, INTEGER, STRING, BIGINT } from 'sequelize';
-import Database from '../db/database';
-import { EmployeeDB, Employee } from './EmployeeModel';
+import dbInstance from '../db.instance';
+import { EmployeeRepository } from './employee.repository';
+import { IOrganization } from '../../../core/models/organization';
 
-export interface IOrganization extends Model {
-  readonly id: number;
-  name: string;
-  // employees: IEmployee[],
-  phone?: string;
-}
+interface IOrganizationModel extends Model, IOrganization {}
 
-export interface OrganizationDTO {
-  name: string;
-  phone?: string;
-}
-
-export type OrganizationModel = typeof Model & {
-  new (values?: object, options?: BuildOptions): IOrganization;
+type OrganizationModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): IOrganizationModel;
 };
 
 /**
@@ -39,7 +30,7 @@ export type OrganizationModel = typeof Model & {
  *       - organizationId
  */
 
-const Organization = <OrganizationModel>Database.define(
+export const OrganizationRepository = <OrganizationModel>dbInstance.define(
   'Organization',
   {
     // if you did not define id attr with primaryKey and autoIncrement prop
@@ -75,7 +66,7 @@ const Organization = <OrganizationModel>Database.define(
   }
 );
 
-Organization.hasMany(EmployeeDB, {
+OrganizationRepository.hasMany(EmployeeRepository, {
   foreignKey: {
     name: 'OrganizationId',
     allowNull: false
@@ -84,10 +75,8 @@ Organization.hasMany(EmployeeDB, {
   as: 'employees'
 });
 
-EmployeeDB.belongsTo(Organization, {
+EmployeeRepository.belongsTo(OrganizationRepository, {
   foreignKey: 'OrganizationId',
   targetKey: 'id',
   as: 'organization'
 });
-
-export { Organization };
