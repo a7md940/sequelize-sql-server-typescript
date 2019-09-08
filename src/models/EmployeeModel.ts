@@ -2,22 +2,45 @@ import { BuildOptions, Model, INTEGER, STRING, BIGINT } from 'sequelize';
 import Database from '../db/database';
 import { Organization, IOrganization } from './OrganizationModel';
 
-export interface IEmployee extends Model {
-  readonly id: number;
-  name: string;
-  organizationId: number;
-  age?: number;
+export class Employee extends Model {
+  constructor(
+    private readonly id: number,
+    private name: string,
+    private organizationId: number,
+    private age?: number
+  ) {
+    super();
+  }
+
+  get getId(): number {
+    return this.id;
+  }
+  get getName(): string {
+    return this.name;
+  }
+  get getOrganizationId(): number {
+    return this.organizationId;
+  }
+  get getAge(): number | undefined {
+    return this.age;
+  }
+  // readonly id: number;
+
+  // name: string;
+  // organizationId: number;
+  // age?: number;
   // organization?: IOrganization;
 }
 
 export interface EmployeeDTO {
+  id?: number;
   name: string;
-  organizationId: number;
+  organizationId?: number;
   age?: number;
 }
 
 type EmployeeModel = typeof Model & {
-  new (values?: object, options?: BuildOptions): IEmployee;
+  new (values?: object, options?: BuildOptions): Employee;
 };
 
 /**
@@ -38,7 +61,7 @@ type EmployeeModel = typeof Model & {
  *       - name
  *       - organizationId
  */
-const Employee = <EmployeeModel>Database.define(
+const EmployeeRepository = <EmployeeModel>Database.define(
   'Employee',
   {
     // if you did not define id attr with primaryKey and autoIncrement prop
@@ -74,4 +97,4 @@ const Employee = <EmployeeModel>Database.define(
   }
 );
 
-export { Employee };
+export { EmployeeRepository as EmployeeDB };

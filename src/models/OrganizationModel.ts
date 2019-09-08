@@ -1,6 +1,6 @@
 import { BuildOptions, Model, INTEGER, STRING, BIGINT } from 'sequelize';
 import Database from '../db/database';
-import { Employee, IEmployee } from './EmployeeModel';
+import { EmployeeDB, Employee } from './EmployeeModel';
 
 export interface IOrganization extends Model {
   readonly id: number;
@@ -75,7 +75,7 @@ const Organization = <OrganizationModel>Database.define(
   }
 );
 
-Organization.hasMany(Employee, {
+Organization.hasMany(EmployeeDB, {
   foreignKey: {
     name: 'OrganizationId',
     allowNull: false
@@ -84,7 +84,7 @@ Organization.hasMany(Employee, {
   as: 'employees'
 });
 
-Employee.belongsTo(Organization, {
+EmployeeDB.belongsTo(Organization, {
   foreignKey: 'OrganizationId',
   targetKey: 'id',
   as: 'organization'

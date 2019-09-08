@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { EmployeeDTO, Employee } from '../../models/EmployeeModel';
+import { EmployeeDTO, EmployeeDB } from '../../models/EmployeeModel';
 import { Organization } from '../../models/OrganizationModel';
 import { Controller, GET, POST } from '../decorators';
 
@@ -52,7 +52,7 @@ class EmployeeController {
   @GET('')
   async getAllEmployee(req: Request, res: Response) {
     try {
-      const emps = await Employee.findAll({
+      const emps = await EmployeeDB.findAll({
         include: [{ model: Organization, as: 'organization' }]
       });
       res.send(emps);
@@ -65,9 +65,9 @@ class EmployeeController {
   @POST('')
   async createEmployee(req: requestWithEmpDTO, res: Response) {
     try {
-      const emp = await Employee.create(req.body);
+      const emp = await EmployeeDB.create(req.body);
       await emp.save();
-      res.json(await Employee.findByPk(emp.id));
+      res.json(await EmployeeDB.findByPk(emp.getId));
     } catch (err) {
       res.send(err);
     }
@@ -75,7 +75,7 @@ class EmployeeController {
 
   @GET('/:orgId')
   async getEmployeeByOrgId(req: Request, res: Response) {
-    Employee.findAll({
+    EmployeeDB.findAll({
       where: {
         OrganizationId: req.params.orgId
       },

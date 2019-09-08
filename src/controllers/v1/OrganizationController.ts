@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Organization, OrganizationDTO } from '../../models/OrganizationModel';
-import { Employee } from '../../models/EmployeeModel';
+import { EmployeeDB } from '../../models/EmployeeModel';
 import { bodyValidator, Controller, GET, POST, use } from '../decorators';
 import authRequired from '../../middleware/auth';
 
@@ -81,7 +81,7 @@ class OrganizationController {
     Organization.findByPk(req.params.orgId, {
       include: [
         {
-          model: Employee,
+          model: EmployeeDB,
           as: 'employees'
         }
       ]
