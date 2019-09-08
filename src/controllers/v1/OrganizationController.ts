@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Organization, OrganizationDTO } from '../../models/OrganizationModel';
 import { Employee } from '../../models/EmployeeModel';
-import { bodyValidator, Controller, GET, POST, use } from '../decorators';
+import { bodyValidator, Controller, GET, POST, use } from '../../core/decorators';
 import authRequired from '../../middleware/auth';
 
 interface requestWithOrgDTO extends Request {

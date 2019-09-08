@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { EmployeeDTO, Employee } from '../../models/EmployeeModel';
 import { Organization } from '../../models/OrganizationModel';
-import { Controller, GET, POST } from '../decorators';
+import { Controller, GET, POST } from '../../core/decorators';
 
 interface requestWithEmpDTO extends Request {
   body: EmployeeDTO;
